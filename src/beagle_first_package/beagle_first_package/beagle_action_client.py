@@ -5,6 +5,7 @@ from std_msgs.msg import Float64
 from beagle_msgs.action import Distbeagle
 import time
 from roboid import *
+my_goal = 0
 
 class RidarActionClient(Node):
 
@@ -33,10 +34,10 @@ class RidarActionClient(Node):
     def goal_response_callback(self, future):
         goal_handle = future.result()
         if not goal_handle.accepted:
-            self.get_logger().info('Goal rejected :(')
+            self.get_logger().info('Goal Rejected :(')
             return
 
-        self.get_logger().info('Goal accepted :)')
+        self.get_logger().info('Goal Accepted :)')
 
         self._get_result_future = goal_handle.get_result_async()
         self._get_result_future.add_done_callback(self.get_result_callback)
@@ -48,12 +49,17 @@ class RidarActionClient(Node):
 
 def main(args=None):
     rclpy.init(args=args)
+    print('rclpy.init')
 
     ridar_action_client = RidarActionClient()
+    print('ridar_action_server = RidarActionServer()')
 
-    ridar_action_client.send_goal(600.0)
+    print('sending goal 60.0') 
+    ridar_action_client.send_goal(60.0)
 
+    print('ridar_action_server is on spin')
     rclpy.spin(ridar_action_client)
+    print('ridar_action_server spin ended')
 
     ridar_action_client.destroy_node()
 

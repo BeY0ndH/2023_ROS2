@@ -9,11 +9,11 @@ from roboid import *
 beagle = Beagle()
 beagle.start_lidar()
 beagle.wait_until_lidar_ready()
-print('lidar starts')
+print('Lidar Starts')
 
 class RidarActionServer(Node):
     def __init__(self):
-        super().__init__('beagle_action')
+        super().__init__('beagle_action_server')
         self._action_server = ActionServer(
             self,
             Distbeagle,
@@ -33,10 +33,12 @@ class RidarActionServer(Node):
 
     def execute_callback(self, goal_handle):
 
-        self.get_logger().info('Executing goal...')
+        self.get_logger().info('Executing Goal...')
 
         feedback_msg = Distbeagle.Feedback()
         result_msg = Distbeagle.Result()
+
+        target_distance = goal_handle.request.target_distance
 
         while rclpy.ok():
             rear_distance = beagle.rear_lidar()
@@ -47,43 +49,50 @@ class RidarActionServer(Node):
 
             if 250 <= rear_distance <= 400 or 250 <= right_distance <= 400 or 250 <= right_rear_distance <= 400:
                 beagle.sound("engine", 1)
+                print('Player is in 3 Tiles Back')
                 time.sleep(1)
 
             if 60 < rear_distance < 250 or 60 < right_distance < 250 or 60 < right_rear_distance < 250:
                 beagle.sound("siren", 1)
+                print('Player is in 1 Tile Back')
                 time.sleep(1)
 
-            if beagle.rear_lidar() <= 60:
+            if rear_distance <= 60:
                 beagle.sound("sad", 1)
+                print('Player Caught the Beagle')
+                print('Beagle is the Loser..')
                 time.sleep(1)
-                print('Loser..')
                 dispose()
                 break
 
             if 250 <= front_distance <= 400 or 250 <= right_front_distance <= 400:
                 beagle.sound("march", 1)
+                print('Player is in 3 Tiles Forward')
                 time.sleep(1)
 
             if 60 < front_distance < 250 or 60 < right_front_distance < 250:
                 beagle.sound("good job", 1)
+                print('Player is in 1 Tile Forward')
                 time.sleep(1)
 
-            if front_distance <= 60:
+            if front_distance <= target_distance:
                 beagle.sound("happy", 1)
+                print('Beagle Caught the Player')
+                print('Beagle is the Winner!!')
                 time.sleep(1)
-                print('Winner!!')
                 beagle.dispose()
                 break
 
             self.current_distance = beagle.front_lidar()
+            print(self.current_distance)
             msg = Float64()
             msg.data = self.current_distance
             self.publisher.publish(msg)
 
-            if self.current_distance <= goal_handle.request.target_distance:
-                self.get_logger().info('Goal reached!')
+            '''if self.current_distance <= target_distance:
+                self.get_logger().info('Goal Reached!')
                 result_msg.current_distance = self.current_distance
-                return Distbeagle.Result(success=True, result=result_msg)
+                return Distbeagle.Result(success=True, result=result_msg)'''
 
             feedback_msg.current_distance = self.current_distance
             goal_handle.publish_feedback(feedback_msg)
@@ -94,14 +103,21 @@ class RidarActionServer(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-
+    print('rclpy.init')
+    
     ridar_action_server = RidarActionServer()
+    print('ridar_action_server = RidarActionServer()')
 
+    print('ridar_action_server is on spin') 
     rclpy.spin(ridar_action_server)
-
+    print('ridar_action_server spin ended')
+      
+    
     ridar_action_server.destroy_node()
+    print('ridar_action_server.destroy_node()')
     
     rclpy.shutdown()
+    print(' rclpy.shutdown()')
 
 if __name__ == '__main__':
     main()
