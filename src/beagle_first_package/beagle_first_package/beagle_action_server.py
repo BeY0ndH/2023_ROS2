@@ -62,7 +62,7 @@ class RidarActionServer(Node):
                 print('Player Caught the Beagle')
                 print('Beagle is the Loser..')
                 time.sleep(1)
-                dispose()
+                beagle.dispose()
                 break
 
             if 250 <= front_distance <= 400 or 250 <= right_front_distance <= 400:
@@ -85,6 +85,7 @@ class RidarActionServer(Node):
 
             self.current_distance = beagle.front_lidar()
             print(self.current_distance)
+            
             msg = Float64()
             msg.data = self.current_distance
             self.publisher.publish(msg)

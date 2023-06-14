@@ -419,7 +419,7 @@ class DICE_CHECKER(Node):
         self.cam = cam
         self.tmi = tmi
         self.current_dice_label = None
-        timer_period = 0.01  # seconds
+        timer_period = 5.0  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
 
     def timer_callback(self):
