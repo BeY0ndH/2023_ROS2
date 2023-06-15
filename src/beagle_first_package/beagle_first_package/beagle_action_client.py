@@ -45,7 +45,7 @@ class RidarActionClient(Node):
     def get_result_callback(self, future):
         result = future.result().result
         self.get_logger().info('Result: {0}'.format(result.current_distance))
-        '''rclpy.shutdown()'''
+        rclpy.shutdown()
 
 def main(args=None):
     rclpy.init(args=args)
@@ -54,8 +54,8 @@ def main(args=None):
     ridar_action_client = RidarActionClient()
     print('ridar_action_server = RidarActionServer()')
 
-    print('sending goal 60.0') 
-    ridar_action_client.send_goal(60.0)
+    print('sending goal 70.0') 
+    ridar_action_client.send_goal(70.0)
 
     print('ridar_action_server is on spin')
     rclpy.spin(ridar_action_client)
