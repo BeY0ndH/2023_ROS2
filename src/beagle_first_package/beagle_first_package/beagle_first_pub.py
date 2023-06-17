@@ -1,6 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from rclpy.parameter import Parameter
+
 from std_msgs.msg import String
 from beagle_msgs.srv import Beagleposition
 import roboidai as ai
@@ -34,7 +34,7 @@ class DICE_CHECKER(Node):
         self.cam = cam
         self.tmi = tmi
         self.current_dice_label = None
-        timer_period = 5.0  # seconds
+        timer_period = 7.0  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
 
     def timer_callback(self):

@@ -55,7 +55,7 @@ def main(args=None):
     print('ridar_action_server = RidarActionServer()')
 
     print('sending goal 70.0') 
-    ridar_action_client.send_goal(70.0)
+    ridar_action_client.send_goal(80.0)
 
     print('ridar_action_server is on spin')
     rclpy.spin(ridar_action_client)
