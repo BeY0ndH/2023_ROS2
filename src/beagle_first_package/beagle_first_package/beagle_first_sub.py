@@ -65,7 +65,13 @@ class direct_mode_sub(Node) :
      def listner_callback(self,msg): # 서브스크라이버의 콜백 함수
           '''move_point = self.move_point'''
           move_point = self.load_move_point()
-          if msg.data == "DICE1" :
+          if msg.data == "DICE0" :
+               print("dice0")
+               self.get_logger().info('Subscribing: "DICE0"')
+               print("beagle stays")
+               
+
+          elif msg.data == "DICE1" :
                print("dice1")
                self.get_logger().info('Subscribing: "DICE1"')
 

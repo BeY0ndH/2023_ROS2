@@ -31,6 +31,12 @@ def generate_launch_description():
                 package='beagle_first_package',
                 executable='beagle_first_pub',
                 output='screen'
+            ),
+            Node(
+                name='beagle_my_pos',
+                package='beagle_my_pos',
+                executable='beagle_my_pos',
+                output='screen'
             )
         ]
     )

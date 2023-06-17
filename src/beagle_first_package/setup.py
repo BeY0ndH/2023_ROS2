@@ -28,7 +28,8 @@ setup(
             #'beagle_service_server = beagle_first_package.beagle_service_server:main',
             #'beagle_action_server = beagle_first_package.beagle_action_server:main',
             'beagle_action_client = beagle_first_package.beagle_action_client:main',
-            'multi_thread = beagle_first_package.multi_thread:main'
+            'multi_thread = beagle_first_package.multi_thread:main',
+            'beagle_my_pos = beagle_first_package.beagle_my_pos:main'
         ],
     },
 )

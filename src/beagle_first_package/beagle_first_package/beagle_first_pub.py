@@ -7,7 +7,7 @@ import roboidai as ai
 import time
 msg = String()
 tmi = ai.TmImage()
-tmi.load_model('/home/youhobae/RobotProgramming/Dice_V3/converted_keras')
+tmi.load_model('/home/youhobae/RobotProgramming/Dice_V3/converted_keras_500')
 
 cam = ai.Camera('ip0', square=True)
 
@@ -18,6 +18,7 @@ print("countdown off")
 class DICE_CHECKER(Node):
     def __init__(self):
         super().__init__('beagle_first_publisher')
+        self.publisher_dice0 = self.create_publisher(String, 'topic', 10)
         self.publisher_dice1 = self.create_publisher(String, 'topic', 10)
         self.publisher_dice2 = self.create_publisher(String, 'topic', 10)
         self.publisher_dice3 = self.create_publisher(String, 'topic', 10)
@@ -47,8 +48,12 @@ class DICE_CHECKER(Node):
             print("Confidence:", conf)
             if conf > 0.8 and label != self.current_dice_label:
                 self.current_dice_label = label
+                if label == 'DICE0':
 
-                if label == 'DICE1':
+                    msg.data = 'DICE0'
+                    self.publisher_dice1.publish(msg)
+                    self.get_logger().info('Publishing: "DICE0"')
+                elif label == 'DICE1':
 
                     msg.data = 'DICE1'
                     self.publisher_dice1.publish(msg)
@@ -79,7 +84,7 @@ class DICE_CHECKER(Node):
                     self.publisher_dice6.publish(msg)
                     self.get_logger().info('Publishing: "DICE6"')
 
-                if msg.data in ['DICE1', 'DICE2', 'DICE3', 'DICE4', 'DICE5', 'DICE6']:
+                if msg.data in ['DICE0', 'DICE1', 'DICE2', 'DICE3', 'DICE4', 'DICE5', 'DICE6']:
                     request = Beagleposition.Request()
                     request.dice_label = msg.data
 
@@ -92,8 +97,9 @@ class DICE_CHECKER(Node):
     def service_response_callback(self, future):
         try:
             response = future.result()
-
-            if msg.data == "DICE1" :
+            if msg.data == "DICE0" :
+                response.move_point += 0
+            elif msg.data == "DICE1" :
                 response.move_point += 1
             elif msg.data == "DICE2" :
                 response.move_point += 2

@@ -1,5 +1,15 @@
-cmake_minimum_required(VERSION 3.8)
-project(beagle_msgs)
+cmake_minimum_required(VERSION 3.5)
+project(beagle_my_pos)
+
+# Default to C99
+if(NOT CMAKE_C_STANDARD)
+  set(CMAKE_C_STANDARD 99)
+endif()
+
+# Default to C++14
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 14)
+endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -7,16 +17,11 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(rosidl_default_generators REQUIRED)
-
+find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
-rosidl_generate_interfaces(${PROJECT_NAME}
-  "msg/CmdAndPoseVel.msg"
-  "action/Distbeagle.action"
-  "srv/Beagleposition.srv"
-)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -29,5 +34,16 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
+add_executable(beagle_my_pos src/beagle_my_pos.cpp)
+ament_target_dependencies(
+  beagle_my_pos
+  std_msgs
+  rclcpp
+)
+
+install(TARGETS
+  beagle_my_pos
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 ament_package()
