@@ -7,7 +7,7 @@ import roboidai as ai
 import time
 msg = String()
 tmi = ai.TmImage()
-tmi.load_model('/home/youhobae/RobotProgramming/Dice_V3/converted_keras_500')
+tmi.load_model('/home/youhobae/RobotProgramming/Dice_V3/converted_keras_150')
 
 cam = ai.Camera('ip0', square=True)
 

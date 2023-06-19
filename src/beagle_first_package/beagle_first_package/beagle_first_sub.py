@@ -224,7 +224,7 @@ class direct_mode_sub(Node) :
                     beagle.sound("happy", 1)
                     print('Beagle Caught the Player')
                     print('Beagle is the Winner!!')
-                    time.sleep(10)
+                    time.sleep(5)
                     beagle.dispose()
                     break
 
